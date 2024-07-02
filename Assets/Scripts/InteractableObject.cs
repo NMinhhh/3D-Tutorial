@@ -11,10 +11,18 @@ public class InteractableObject : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButton(0) && playerInRange & SelectionManager.Instance.onTarget)
+        if (Input.GetMouseButton(0) && playerInRange && SelectionManager.Instance.onTarget && SelectionManager.Instance.selectedObject == gameObject)
         {
-            Debug.Log("Picked up item");
-            Destroy(gameObject);
+
+            if (!InventorySystem.Instance.CheckIfFull())
+            {
+                InventorySystem.Instance.AddToInventory(itemName);
+                Destroy(gameObject);
+            }
+            else
+            {
+                Debug.Log("Inventory id full");
+            }
         }
     }
 

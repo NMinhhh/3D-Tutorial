@@ -25,6 +25,8 @@ public class SelectionManager : MonoBehaviour
 
     [SerializeField] private GameObject interaction_Info_UI;
 
+    public GameObject selectedObject;
+
     Text text;
     
     public bool onTarget {  get; private set; }
@@ -47,6 +49,7 @@ public class SelectionManager : MonoBehaviour
             if (interactable && interactable.playerInRange)
             {
                 onTarget = true;
+                selectedObject = interactable.gameObject;
                 text.text = selectionTransform.GetComponent<InteractableObject>().GetItemName();
                 interaction_Info_UI.SetActive(true);
             }
