@@ -20,7 +20,7 @@ public class InventorySystem : MonoBehaviour
     [SerializeField] private GameObject inventoryScreen;
 
     [SerializeField] private List<GameObject> slotList = new List<GameObject>();
-    [SerializeField] private List<string> itemList = new List<string>();
+    public List<string> itemList = new List<string>();
 
     private GameObject whatIsSlotToEquip;
     private GameObject itemAdd;
@@ -35,6 +35,18 @@ public class InventorySystem : MonoBehaviour
         PopulateSlotList();
     }
 
+    private void PopulateSlotList()
+    {
+        foreach (Transform chill in inventoryScreen.transform)
+        {
+            if (chill.CompareTag("Slot"))
+            {
+                slotList.Add(chill.gameObject);
+            }
+        }
+    }
+
+
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.I) && !isOpen)
@@ -46,19 +58,11 @@ public class InventorySystem : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.I) && isOpen)
         {
             isOpen = false;
-            Cursor.lockState = CursorLockMode.Locked;
-            inventoryScreen.SetActive(false);
-        }
-    }
-
-    private void PopulateSlotList()
-    {
-        foreach(Transform chill in inventoryScreen.transform)
-        {
-            if (chill.CompareTag("Slot"))
+            if (!CraftingSystem.Instance.isOpen)
             {
-                slotList.Add(chill.gameObject);
+                Cursor.lockState = CursorLockMode.Locked;
             }
+            inventoryScreen.SetActive(false);
         }
     }
 
@@ -66,6 +70,7 @@ public class InventorySystem : MonoBehaviour
     {
         whatIsSlotToEquip = FindNextEmptySlot();
         itemAdd = Instantiate(Resources.Load<GameObject>(itemName), whatIsSlotToEquip.transform.position, whatIsSlotToEquip.transform.rotation);
+        itemAdd.name = itemName;
         itemList.Add(itemName);
         itemAdd.transform.SetParent(whatIsSlotToEquip.transform);
     }
@@ -96,5 +101,31 @@ public class InventorySystem : MonoBehaviour
             return false;
     }
 
-   
+    internal void RemoveItem(string nameToRemove, int amountToRemove)
+    {
+        int counter = amountToRemove;
+        for(int i = slotList.Count - 1; i >= 0; i--)
+        {
+            if (slotList[i].transform.childCount > 0)
+            {
+                if (slotList[i].transform.GetChild(0).gameObject.name == nameToRemove && amountToRemove > 0)
+                {
+                    Destroy(slotList[i].transform.GetChild(0).gameObject);
+                    amountToRemove -= 1;
+                }
+            }
+        }
+    }
+
+    internal void ReCaculateList()
+    {
+        itemList.Clear();
+        foreach(GameObject slot in slotList)
+        {
+            if(slot.transform.childCount > 0)
+            {
+                itemList.Add(slot.transform.GetChild(0).gameObject.name);
+            }
+        }
+    }
 }
