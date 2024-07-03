@@ -24,6 +24,9 @@ public class SelectionManager : MonoBehaviour
     #endregion
 
     [SerializeField] private GameObject interaction_Info_UI;
+    [SerializeField] private Image centerDotIcon;
+    [SerializeField] private Image centerHandIcon;
+
 
     public GameObject selectedObject;
 
@@ -52,17 +55,31 @@ public class SelectionManager : MonoBehaviour
                 selectedObject = interactable.gameObject;
                 text.text = selectionTransform.GetComponent<InteractableObject>().GetItemName();
                 interaction_Info_UI.SetActive(true);
+                if (interactable.CompareTag("Pickable"))
+                {
+                    centerDotIcon.gameObject.SetActive(false);
+                    centerHandIcon.gameObject.SetActive(true);
+                }
+                else
+                {
+                    centerDotIcon.gameObject.SetActive(true);
+                    centerHandIcon.gameObject.SetActive(false);
+                }
             }
             else
             {
                 onTarget = false;
                 interaction_Info_UI.SetActive(false);
+                centerDotIcon.gameObject.SetActive(true);
+                centerHandIcon.gameObject.SetActive(false);
             }
         }
         else
         {
             onTarget = false;
             interaction_Info_UI.SetActive(false);
+            centerDotIcon.gameObject.SetActive(true);
+            centerHandIcon.gameObject.SetActive(false);
         }
     }
 }

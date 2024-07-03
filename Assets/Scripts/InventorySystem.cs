@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class InventorySystem : MonoBehaviour
 {
@@ -17,6 +18,8 @@ public class InventorySystem : MonoBehaviour
     }
     #endregion
 
+    [Header("Inventory")]
+
     [SerializeField] private GameObject inventoryScreen;
 
     [SerializeField] private List<GameObject> slotList = new List<GameObject>();
@@ -24,11 +27,20 @@ public class InventorySystem : MonoBehaviour
 
     private GameObject whatIsSlotToEquip;
     private GameObject itemAdd;
-
-
     public bool isOpen {  get; private set; }
+    [Space]
+    [Space]
 
-    // Start is called before the first frame update
+
+    [Header("Pickup PopUp")]
+    [SerializeField] private GameObject pickupAlert;
+    [SerializeField] private Text pickupName;
+    [SerializeField] private Image pickupImage;
+
+    [Header("Item Info Panel")]
+    public GameObject itemInfoPanelUI;
+
+
     void Start()
     {
         isOpen = false;
@@ -73,6 +85,17 @@ public class InventorySystem : MonoBehaviour
         itemAdd.name = itemName;
         itemList.Add(itemName);
         itemAdd.transform.SetParent(whatIsSlotToEquip.transform);
+        TriggerPickupPopUp(itemName, itemAdd.transform.GetComponent<Image>().sprite);
+        ReCaculateList();
+        CraftingSystem.Instance.RefreshNeededItems();
+
+    }
+
+    private void TriggerPickupPopUp(string pickupName, Sprite pickupImage)
+    {
+        pickupAlert.SetActive(true);
+        this.pickupName.text = "+1 " + pickupName;
+        this.pickupImage.sprite = pickupImage;
     }
 
     private GameObject FindNextEmptySlot()
@@ -101,7 +124,7 @@ public class InventorySystem : MonoBehaviour
             return false;
     }
 
-    internal void RemoveItem(string nameToRemove, int amountToRemove)
+    public void RemoveItem(string nameToRemove, int amountToRemove)
     {
         int counter = amountToRemove;
         for(int i = slotList.Count - 1; i >= 0; i--)
@@ -110,14 +133,17 @@ public class InventorySystem : MonoBehaviour
             {
                 if (slotList[i].transform.GetChild(0).gameObject.name == nameToRemove && amountToRemove > 0)
                 {
-                    Destroy(slotList[i].transform.GetChild(0).gameObject);
+                    DestroyImmediate(slotList[i].transform.GetChild(0).gameObject);
                     amountToRemove -= 1;
                 }
             }
         }
+        ReCaculateList();
+        CraftingSystem.Instance.RefreshNeededItems();
+
     }
 
-    internal void ReCaculateList()
+    public void ReCaculateList()
     {
         itemList.Clear();
         foreach(GameObject slot in slotList)
