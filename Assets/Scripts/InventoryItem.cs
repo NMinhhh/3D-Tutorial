@@ -27,6 +27,11 @@ public class InventoryItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     [SerializeField] private float caloriesEffect;
     [SerializeField] private float hydrationEffect;
 
+    [Header("Equip")]
+    private GameObject itemPendingEquipping;
+    public bool isEquippable;
+    public bool isNowEquipped;
+    public bool isSelected;
 
 
     // Start is called before the first frame update
@@ -41,7 +46,14 @@ public class InventoryItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     // Update is called once per frame
     void Update()
     {
-        
+        if (isSelected)
+        {
+            gameObject.GetComponent<DragDrop>().enabled = false;
+        }
+        else
+        {
+            gameObject.GetComponent<DragDrop>().enabled = true;
+        }
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -66,6 +78,12 @@ public class InventoryItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
                 itemPendingConsumption = gameObject;
                 ConsumingFuction(healthEffect, caloriesEffect, hydrationEffect);
             }
+
+            if(isEquippable && !isNowEquipped && !EquipSystem.Instance.CheckIfFull())
+            {
+                EquipSystem.Instance.AddToQuickSlot(gameObject);
+                isNowEquipped = true;
+            }
         }
     }
 
@@ -79,6 +97,7 @@ public class InventoryItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
                 InventorySystem.Instance.ReCaculateList();
                 CraftingSystem.Instance.RefreshNeededItems();
             }
+
         }
     }
 

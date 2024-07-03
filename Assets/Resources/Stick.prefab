@@ -106,10 +106,12 @@ MonoBehaviour:
   thisName: Stick
   thisDescription: A dry stick
   thisFunctionality: Uesd for crafting
-  isConsumable: 1
+  isConsumable: 0
   healthEffect: 10
   caloriesEffect: 10
   hydrationEffect: 2
+  isEquippable: 1
+  isNowEquipped: 0
 --- !u!225 &146062358189889595
 CanvasGroup:
   m_ObjectHideFlags: 0

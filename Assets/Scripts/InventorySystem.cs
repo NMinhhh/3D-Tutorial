@@ -36,6 +36,9 @@ public class InventorySystem : MonoBehaviour
     [SerializeField] private GameObject pickupAlert;
     [SerializeField] private Text pickupName;
     [SerializeField] private Image pickupImage;
+    [SerializeField] private float appearTimer;
+    private float startAppearTimer;
+    private bool isPickup;
 
     [Header("Item Info Panel")]
     public GameObject itemInfoPanelUI;
@@ -66,6 +69,8 @@ public class InventorySystem : MonoBehaviour
             isOpen = true;
             Cursor.lockState = CursorLockMode.None;
             inventoryScreen.SetActive(true);
+            Cursor.visible = true;
+            SelectionManager.Instance.DisableSelection();
         }
         else if (Input.GetKeyDown(KeyCode.I) && isOpen)
         {
@@ -73,8 +78,18 @@ public class InventorySystem : MonoBehaviour
             if (!CraftingSystem.Instance.isOpen)
             {
                 Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+                SelectionManager.Instance.EnableSelection();
             }
             inventoryScreen.SetActive(false);
+        }
+        if (isPickup)
+        {
+            if(Time.time >= startAppearTimer + appearTimer)
+            {
+                isPickup = false;
+                pickupAlert.gameObject.SetActive(false);
+            }
         }
     }
 
@@ -93,6 +108,8 @@ public class InventorySystem : MonoBehaviour
 
     private void TriggerPickupPopUp(string pickupName, Sprite pickupImage)
     {
+        isPickup = true;
+        startAppearTimer = Time.time;
         pickupAlert.SetActive(true);
         this.pickupName.text = "+1 " + pickupName;
         this.pickupImage.sprite = pickupImage;

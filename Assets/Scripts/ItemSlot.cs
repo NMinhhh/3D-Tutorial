@@ -24,6 +24,15 @@ public class ItemSlot : MonoBehaviour, IDropHandler
         {
             DragDrop.itemBeingDragged.transform.SetParent(transform);
             DragDrop.itemBeingDragged.transform.localPosition = Vector2.zero;
+            if (!DragDrop.itemBeingDragged.CompareTag("QuickSlot"))
+            {
+                DragDrop.itemBeingDragged.GetComponent<InventoryItem>().isNowEquipped = false;
+            }
+            else if (DragDrop.itemBeingDragged.CompareTag("QuickSlot"))
+            {
+                DragDrop.itemBeingDragged.GetComponent<InventoryItem>().isNowEquipped = true;
+            }
+            
         }
     }
 }

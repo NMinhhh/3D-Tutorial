@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -81,5 +82,22 @@ public class SelectionManager : MonoBehaviour
             centerDotIcon.gameObject.SetActive(true);
             centerHandIcon.gameObject.SetActive(false);
         }
+    }
+
+    internal void DisableSelection()
+    {
+        Instance.GetComponent<SelectionManager>().enabled = false;
+        centerDotIcon.gameObject.SetActive(false);
+        centerHandIcon.gameObject.SetActive(false);
+        interaction_Info_UI.SetActive(false);
+        selectedObject = null;
+    }
+
+    internal void EnableSelection()
+    {
+        Instance.GetComponent<SelectionManager>().enabled = true;
+        centerDotIcon.gameObject.SetActive(true);
+        centerHandIcon.gameObject.SetActive(true);
+        interaction_Info_UI.SetActive(true);
     }
 }
