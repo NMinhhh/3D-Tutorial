@@ -36,7 +36,10 @@ public class SelectionManager : MonoBehaviour
     
     public bool onTarget {  get; private set; }
 
-    // Start is called before the first frame update
+    [Header("Chopped Tree")]
+    public GameObject selectedTree;
+    public GameObject choppableHolder;
+
     void Start()
     {
         text = interaction_Info_UI.GetComponent<Text>();
@@ -51,6 +54,26 @@ public class SelectionManager : MonoBehaviour
         {
             var selectionTransform = hit.transform;
             InteractableObject interactable = selectionTransform.GetComponent<InteractableObject>();
+
+            ChoppableTree choppableTree = selectionTransform.GetComponent<ChoppableTree>();
+            
+            if(choppableTree && choppableTree.playerInRange)
+            {
+                selectedTree = choppableTree.gameObject;
+                choppableTree.canBeChopped = true;
+                choppableHolder.SetActive(true);
+            }
+            else
+            {
+                if(selectedTree != null)
+                {
+                    selectedTree.gameObject.GetComponent<ChoppableTree>().canBeChopped = false;
+                    selectedTree = null;
+                    choppableHolder.SetActive(false);
+                }
+            }
+
+
             if (interactable && interactable.playerInRange)
             {
                 onTarget = true;

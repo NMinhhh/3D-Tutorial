@@ -68,7 +68,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -1888161341, guid: 9b2e85ea03d49e143a0250df888470f7, type: 3}
+  m_Sprite: {fileID: 1593096192, guid: 9b2e85ea03d49e143a0250df888470f7, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -112,6 +112,7 @@ MonoBehaviour:
   hydrationEffect: 2
   isEquippable: 1
   isNowEquipped: 0
+  isSelected: 0
 --- !u!225 &146062358189889595
 CanvasGroup:
   m_ObjectHideFlags: 0
