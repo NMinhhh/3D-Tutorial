@@ -28,6 +28,7 @@ public class SelectionManager : MonoBehaviour
     [SerializeField] private Image centerDotIcon;
     [SerializeField] private Image centerHandIcon;
 
+    public bool isHand {  get; private set; }
 
     public GameObject selectedObject;
 
@@ -60,11 +61,13 @@ public class SelectionManager : MonoBehaviour
                 {
                     centerDotIcon.gameObject.SetActive(false);
                     centerHandIcon.gameObject.SetActive(true);
+                    isHand = true;
                 }
                 else
                 {
                     centerDotIcon.gameObject.SetActive(true);
                     centerHandIcon.gameObject.SetActive(false);
+                    isHand = false;
                 }
             }
             else
@@ -73,6 +76,7 @@ public class SelectionManager : MonoBehaviour
                 interaction_Info_UI.SetActive(false);
                 centerDotIcon.gameObject.SetActive(true);
                 centerHandIcon.gameObject.SetActive(false);
+                isHand = false;
             }
         }
         else
@@ -97,7 +101,11 @@ public class SelectionManager : MonoBehaviour
     {
         Instance.GetComponent<SelectionManager>().enabled = true;
         centerDotIcon.gameObject.SetActive(true);
-        centerHandIcon.gameObject.SetActive(true);
-        interaction_Info_UI.SetActive(true);
+        if (onTarget)
+        {
+            centerHandIcon.gameObject.SetActive(true);
+            interaction_Info_UI.SetActive(true);
+        }
+  
     }
 }

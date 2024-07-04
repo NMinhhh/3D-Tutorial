@@ -19,13 +19,21 @@ public class EquipSystem : MonoBehaviour
     }
     #endregion
 
+    [Header("QuickSlots")]
     [SerializeField] private GameObject quickSlotPanerl;
 
     [SerializeField] private List<GameObject> quickSlotList = new List<GameObject>();
 
+    [Header("Numbers Holder")]
     [SerializeField] private GameObject numbersHolder;
     private int selectedNumber = -1;
     public GameObject selectedItem;
+
+    [Header("Weapon Holder")]
+    [SerializeField] private Transform weaponHolder;
+
+    private GameObject selectedItemModel;
+
 
     // Start is called before the first frame update
     void Start()
@@ -81,6 +89,8 @@ public class EquipSystem : MonoBehaviour
                 selectedItem = GetSelectedItem(number);
                 selectedItem.GetComponent<InventoryItem>().isSelected = true;
 
+                SelectedItemModel(selectedItem.gameObject.name);
+
                 foreach (Transform child in numbersHolder.transform)
                 {
                     child.Find("Text").GetComponent<Text>().color = Color.gray;
@@ -97,11 +107,30 @@ public class EquipSystem : MonoBehaviour
                     selectedItem = null;
                 }
 
+                if (selectedItemModel != null)
+                {
+                    DestroyImmediate(selectedItemModel.gameObject);
+                    selectedItemModel = null;
+                }
+
                 numbersHolder.transform.GetChild(number - 1).Find("Text").GetComponent<Text>().color = Color.grey;
             }
            
          
         }
+    }
+
+    private void SelectedItemModel(string itemName)
+    {
+        if(selectedItemModel != null)
+        {
+            DestroyImmediate(selectedItemModel.gameObject);
+            selectedItemModel = null;
+        }
+        GameObject model = Resources.Load<GameObject>("Model/" + itemName);
+        selectedItemModel = Instantiate(model, model.transform.localPosition,
+            model.transform.localRotation);
+        selectedItemModel.transform.SetParent(weaponHolder.transform, false);
     }
 
     private GameObject GetSelectedItem(int number)
