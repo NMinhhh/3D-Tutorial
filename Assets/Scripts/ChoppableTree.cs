@@ -50,7 +50,8 @@ public class ChoppableTree : MonoBehaviour
         Destroy(transform.parent.transform.parent.gameObject);
         SelectionManager.Instance.selectedTree = null;
         SelectionManager.Instance.choppableHolder.SetActive(false);
-        Instantiate(Resources.Load<GameObject>("Model/ChoppedTree"), new Vector3(pos.x, pos.y + 1, pos.z), Quaternion.Euler(0, 0, 0));
+        Instantiate(Resources.Load<GameObject>("Model/ChoppedTree"), new Vector3(pos.x, pos.y, pos.z), Quaternion.Euler(0, 0, 0));
+        SoundManager.Instance.PlaySound(SoundManager.Instance.treeFallingSound);
 
     }
 

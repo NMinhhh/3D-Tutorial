@@ -127,15 +127,15 @@ public class InventorySystem : MonoBehaviour
         return new GameObject();
     }
 
-    public bool CheckIfFull()
+    public bool CheckSlotToAvailable(int numberOfEmptySlots)
     {
-        int counter = 0;
+        int emptySlots = 0;
         foreach(GameObject slot in slotList)
         {
             if (slot.transform.childCount > 0)
-                counter++;
+                emptySlots++;
         }
-        if (counter == 21)
+        if (emptySlots >= numberOfEmptySlots)
             return true;
         else 
             return false;

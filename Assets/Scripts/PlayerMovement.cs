@@ -13,6 +13,9 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Transform groundCheck;
     [SerializeField] private float groundDistance;
 
+    private Vector3 lastPos;
+    private bool isMove;
+
     private Vector3 velocity;
 
     private bool isGrounded;
@@ -49,5 +52,16 @@ public class PlayerMovement : MonoBehaviour
 
         velocity.y += gravity * Time.deltaTime;
         characterController.Move(velocity * Time.deltaTime);
+        if(lastPos != gameObject.transform.position && isGrounded)
+        {
+            isMove = true;
+            SoundManager.Instance.PlaySound(SoundManager.Instance.walkSound);
+        }
+        else
+        {
+            isMove = false;
+            SoundManager.Instance.walkSound.Stop();
+        }
+        lastPos = gameObject.transform.position;
     }
 }

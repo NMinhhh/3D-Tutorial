@@ -14,8 +14,9 @@ public class InteractableObject : MonoBehaviour
         if (Input.GetMouseButton(0) && playerInRange && SelectionManager.Instance.onTarget && SelectionManager.Instance.selectedObject == gameObject)
         {
 
-            if (!InventorySystem.Instance.CheckIfFull())
+            if (InventorySystem.Instance.CheckSlotToAvailable(1))
             {
+                SoundManager.Instance.PlaySound(SoundManager.Instance.pickupSound);
                 InventorySystem.Instance.AddToInventory(itemName);
                 Destroy(gameObject);
             }

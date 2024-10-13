@@ -117,6 +117,7 @@ public class SelectionManager : MonoBehaviour
         centerDotIcon.gameObject.SetActive(false);
         centerHandIcon.gameObject.SetActive(false);
         interaction_Info_UI.SetActive(false);
+        choppableHolder.SetActive(false);
         selectedObject = null;
     }
 
